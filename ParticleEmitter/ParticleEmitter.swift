@@ -27,7 +27,6 @@ struct ParticleEmitter<Particle: View>: View {
 					return assertionFailure("Missing symbol")
 				}
 				for particle in state.particles {
-					print(particle.rotation.degrees)
 					let position = CGPoint(x: particle.position.x * size.width,
 																 y: particle.position.y * size.height)
 					context.translateBy(x: position.x, y: position.y)
@@ -35,7 +34,9 @@ struct ParticleEmitter<Particle: View>: View {
 					context.scaleBy(x: particle.scale, y: particle.scale)
 					context.translateBy(x: -position.x, y: -position.y)
 					context.draw(symbol, at: position)
+					context.transform = .identity
 				}
+				context.draw(Text("FPS: \(state.fps)"), at: CGPoint(x: 10, y: size.height - 10), anchor: .bottomLeading)
 			} symbols: {
 				particle
 					.tag(particleId)

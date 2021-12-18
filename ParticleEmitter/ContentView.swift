@@ -12,17 +12,28 @@ struct ContentView: View {
 	let amount: Int = 10_000
 	
 	var body: some View {
-		ParticleEmitter(runMode: .infinite(.fixed(1)), emissionRules: rules) {
-			Rectangle()
-				.foregroundColor(.yellow)
-				.frame(width: 10, height: 10)
+		ParticleEmitter(runMode: .infinite(.variable(starting: 100, rate: 10, maximum: 1000)), emissionRules: rules) {
+			Image(systemName: "snowflake")
+				.font(.caption2)
+				.foregroundColor(.cyan)
 		}
+		.ignoresSafeArea()
 	}
 	
 	var rules: EmissionRules {
-		.init(emissionSource: .point(.init(x: 0.5, y: 0.5)),
-					rotation: Angle(degrees: 45),
-					scale: 2)
+		.init(lifetime: 1000,
+					lifetimeVariation: 0,
+					emissionSource: .horizontalLine(offset: 0),
+					speed: CGVector(dx: 0, dy: 100),
+					speedVariation: CGVector(dx: 0, dy: 25),
+					rotation: .zero,
+					rotationVariation: .degrees(360),
+					rotationSpeed: .zero,
+					rotationSpeedVariation: .degrees(90),
+					scale: 1,
+					scaleVariation: 0.5,
+					scaleSpeed: -0.1,
+					scaleSpeedVariation: 0)
 	}
 }
 

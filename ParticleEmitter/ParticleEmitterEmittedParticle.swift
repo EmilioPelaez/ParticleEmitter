@@ -10,17 +10,28 @@ import Foundation
 import SwiftUI
 
 extension ParticleEmitter {
-	struct EmittedParticle {
+	class EmittedParticle {
 		let emittedAt: Date
 		let expiration: Date
 		
 		var position: CGPoint
-		var velocity: CGVector = .zero
+		var velocity: CGVector
 		
-		var rotation: Angle = .zero
-		var rotationSpeed: Angle = .zero
+		var rotation: Angle
+		var rotationSpeed: Angle
 		
-		var scale: CGFloat = 1
-		var scaleSpeed: CGFloat = 0
+		var scale: CGFloat
+		var scaleSpeed: CGFloat
+		
+		init(emittedAt: Date, expiration: Date, position: CGPoint, velocity: CGVector, rotation: Angle, rotationSpeed: Angle, scale: CGFloat, scaleSpeed: CGFloat) {
+			self.emittedAt = emittedAt
+			self.expiration = expiration
+			self.position = position
+			self.velocity = velocity
+			self.rotation = rotation
+			self.rotationSpeed = rotationSpeed
+			self.scale = scale
+			self.scaleSpeed = scaleSpeed
+		}
 	}
 }

@@ -5,8 +5,10 @@
 //  Created by Emilio Peláez on 18/12/21.
 //
 
+import CGMath
 import CoreGraphics
 import Foundation
+import SwiftUI
 
 extension ParticleEmitter {
 	class InternalState {
@@ -22,6 +24,7 @@ extension ParticleEmitter {
 		let emitterMode: EmitterMode
 		
 		var lastUpdate: Date
+		var fps: Int = 0
 		var particles: [EmittedParticle] = []
 		
 		init(runMode: RunMode, emissionRules: EmissionRules) {
@@ -43,16 +46,18 @@ extension ParticleEmitter {
 		
 		func tick(date: Date, canvasSize: CGSize) {
 			let delta = date.timeIntervalSince(lastUpdate)
+			guard delta > 0 else { return }
+			fps = Int(1 / delta)
 			update(date: date, delta: delta, canvasSize: canvasSize)
 			lastUpdate = date
 		}
 		
 		private func update(date: Date, delta: TimeInterval, canvasSize: CGSize) {
-			removeParticles(on: date)
 			emitParticles(delta, canvasSize: canvasSize)
 			for particle in particles {
 				updateParticle(particle, delta: delta, canvasSize: canvasSize)
 			}
+			removeParticles(on: date)
 		}
 		
 		private func emitStartingParticles() {
@@ -62,11 +67,8 @@ extension ParticleEmitter {
 		}
 		
 		private func removeParticles(on date: Date) {
-			let previousCount = particles.count
-			particles = particles.filter { $0.expiration > date }
-			let difference = previousCount - particles.count
-			if difference > 0 {
-				print("Removed \(difference) particles")
+			particles = particles.filter {
+				$0.expiration > date && $0.scale > 0
 			}
 		}
 		
@@ -100,7 +102,11 @@ extension ParticleEmitter {
 		}
 		
 		private func updateParticle(_ particle: EmittedParticle, delta: TimeInterval, canvasSize: CGSize) {
-			
+			let movement = CGPoint(x: particle.velocity.dx / canvasSize.width,
+														 y: particle.velocity.dy / canvasSize.height)
+			particle.position = particle.position + movement * delta
+			particle.rotation += particle.rotationSpeed * delta
+			particle.scale += particle.scaleSpeed * delta
 		}
 		
 	}
