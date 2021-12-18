@@ -13,6 +13,9 @@
 		C8BD1645276D53E30006EE07 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C8BD1644276D53E30006EE07 /* Preview Assets.xcassets */; };
 		C8BD164C276D57CE0006EE07 /* ParticleEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8BD164B276D57CE0006EE07 /* ParticleEmitter.swift */; };
 		C8BD164E276D57E50006EE07 /* ParticleEmitterRunMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8BD164D276D57E50006EE07 /* ParticleEmitterRunMode.swift */; };
+		C8BD1650276DCFB20006EE07 /* ParticleEmitterInternalState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8BD164F276DCFB20006EE07 /* ParticleEmitterInternalState.swift */; };
+		C8BD1652276DD0850006EE07 /* ParticleEmitterEmittedParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8BD1651276DD0850006EE07 /* ParticleEmitterEmittedParticle.swift */; };
+		C8BD1654276DD6C50006EE07 /* ParticleEmitterEmissionSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8BD1653276DD6C50006EE07 /* ParticleEmitterEmissionSource.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +26,9 @@
 		C8BD1644276D53E30006EE07 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C8BD164B276D57CE0006EE07 /* ParticleEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleEmitter.swift; sourceTree = "<group>"; };
 		C8BD164D276D57E50006EE07 /* ParticleEmitterRunMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleEmitterRunMode.swift; sourceTree = "<group>"; };
+		C8BD164F276DCFB20006EE07 /* ParticleEmitterInternalState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleEmitterInternalState.swift; sourceTree = "<group>"; };
+		C8BD1651276DD0850006EE07 /* ParticleEmitterEmittedParticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleEmitterEmittedParticle.swift; sourceTree = "<group>"; };
+		C8BD1653276DD6C50006EE07 /* ParticleEmitterEmissionSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleEmitterEmissionSource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +65,9 @@
 				C8BD163F276D53E20006EE07 /* ContentView.swift */,
 				C8BD164B276D57CE0006EE07 /* ParticleEmitter.swift */,
 				C8BD164D276D57E50006EE07 /* ParticleEmitterRunMode.swift */,
+				C8BD1653276DD6C50006EE07 /* ParticleEmitterEmissionSource.swift */,
+				C8BD164F276DCFB20006EE07 /* ParticleEmitterInternalState.swift */,
+				C8BD1651276DD0850006EE07 /* ParticleEmitterEmittedParticle.swift */,
 				C8BD1641276D53E30006EE07 /* Assets.xcassets */,
 				C8BD1643276D53E30006EE07 /* Preview Content */,
 			);
@@ -144,7 +153,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				C8BD1640276D53E20006EE07 /* ContentView.swift in Sources */,
+				C8BD1654276DD6C50006EE07 /* ParticleEmitterEmissionSource.swift in Sources */,
 				C8BD163E276D53E20006EE07 /* ParticleEmitterApp.swift in Sources */,
+				C8BD1650276DCFB20006EE07 /* ParticleEmitterInternalState.swift in Sources */,
+				C8BD1652276DD0850006EE07 /* ParticleEmitterEmittedParticle.swift in Sources */,
 				C8BD164C276D57CE0006EE07 /* ParticleEmitter.swift in Sources */,
 				C8BD164E276D57E50006EE07 /* ParticleEmitterRunMode.swift in Sources */,
 			);
