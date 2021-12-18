@@ -10,31 +10,38 @@ import Foundation
 
 extension ParticleEmitter {
 	class InternalState {
+		enum EmitterMode {
+			case disabled
+			case threshold(TimeInterval)
+			case targetAmount(Int)
+		}
+		
 		let runMode: RunMode
 		
-		var initialEmittionDone = false
-		let emissionArea: CGRect
-		var emissionThreshold: TimeInterval?
+		let emissionRules: EmissionRules
+		let emitterMode: EmitterMode
 		
 		var lastUpdate: Date
 		var particles: [EmittedParticle] = []
 		
-		init(runMode: RunMode, emissionSource: EmissionSource) {
+		init(runMode: RunMode, emissionRules: EmissionRules) {
 			self.runMode = runMode
 			
-			self.emissionArea = emissionSource.emissionArea
+			self.emissionRules = emissionRules
 			if let rate = runMode.rate, rate > 0 {
-				emissionThreshold = 1 / TimeInterval(rate)
+				emitterMode = .threshold(1 / TimeInterval(rate))
+			} else if let targetAmount = runMode.targetAmount {
+				emitterMode = .targetAmount(targetAmount)
+			} else {
+				emitterMode = .disabled
 			}
 			
 			self.lastUpdate = Date()
+			
+			emitStartingParticles()
 		}
 		
 		func tick(date: Date, canvasSize: CGSize) {
-			if !initialEmittionDone {
-				emitStartingParticles(canvasSize: canvasSize)
-				initialEmittionDone = true
-			}
 			let delta = date.timeIntervalSince(lastUpdate)
 			update(date: date, delta: delta, canvasSize: canvasSize)
 			lastUpdate = date
@@ -48,9 +55,9 @@ extension ParticleEmitter {
 			}
 		}
 		
-		private func emitStartingParticles(canvasSize: CGSize) {
+		private func emitStartingParticles() {
 			(0..<runMode.initialParticleAmount).forEach { _ in
-				emitParticle(canvasSize: canvasSize)
+				emitParticle()
 			}
 		}
 		
@@ -60,16 +67,31 @@ extension ParticleEmitter {
 		
 		private var aggregationTimer: TimeInterval = 0
 		private func emitParticles(_ delta: TimeInterval, canvasSize: CGSize) {
-			guard let emissionThreshold = emissionThreshold else { return }
-			aggregationTimer += delta
-			while aggregationTimer > emissionThreshold {
-				emitParticle(canvasSize: canvasSize)
-				aggregationTimer -= emissionThreshold
+			switch emitterMode {
+			case let .threshold(threshold):
+				aggregationTimer += delta
+				while aggregationTimer > threshold {
+					emitParticle()
+					aggregationTimer -= threshold
+				}
+			case let .targetAmount(amount):
+				while particles.count < amount {
+					emitParticle()
+				}
+			case .disabled: break
 			}
 		}
 		
-		private func emitParticle(canvasSize: CGSize) {
-			
+		private func emitParticle() {
+			let lifetime = emissionRules.lifetime + .random(in: -emissionRules.lifetimeVariation...emissionRules.lifetimeVariation)
+//			let particle = EmittedParticle(emittedAt: lastUpdate,
+//																		 expiration: <#T##Date#>,
+//																		 position: <#T##CGPoint#>,
+//																		 velocity: <#T##CGVector#>,
+//																		 rotation: <#T##Angle#>,
+//																		 rotationSpeed: <#T##Angle#>,
+//																		 scale: <#T##CGFloat#>,
+//																		 scaleSpeed: <#T##CGFloat#>)
 		}
 		
 		private func updateParticle(_ particle: EmittedParticle, delta: TimeInterval, canvasSize: CGSize) {

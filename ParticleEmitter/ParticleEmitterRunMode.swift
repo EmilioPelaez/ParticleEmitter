@@ -9,26 +9,41 @@ import Foundation
 
 extension ParticleEmitter {
 	enum RunMode {
-		case infinite(starting: Int, rate: Int)
+		enum Amount {
+			case fixed(Int)
+			case variable(starting: Int, rate: Int, maximum: Int)
+		}
+		
+		case infinite(Amount)
 		case once(particles: Int, completion: () -> Void)
-		case timed(TimeInterval, starting: Int, rate: Int, completion: () -> Void)
+		case timed(TimeInterval, Amount, completion: () -> Void)
 	}
 }
 
 extension ParticleEmitter.RunMode {
 	var initialParticleAmount: Int {
 		switch self {
-		case let .infinite(starting, _): return starting
+		case let .infinite(.fixed(amount)): return amount
+		case let .infinite(.variable(starting, _, _)): return starting
 		case let .once(particles, _): return particles
-		case let .timed(_, starting, _, _): return starting
+		case let .timed(_, .fixed(amount), _): return amount
+		case let .timed(_, .variable(starting, _, _), _): return starting
 		}
 	}
 	
 	var rate: Int? {
 		switch self {
-		case let .infinite(_, rate): return rate
-		case .once: return nil
-		case let .timed(_, _, rate, _): return rate
+		case let .infinite(.variable(_, rate, _)): return rate
+		case let .timed(_, .variable(_, rate, _), _): return rate
+		case _: return nil
+		}
+	}
+	
+	var targetAmount: Int? {
+		switch self {
+		case let .infinite(.fixed(amount)): return amount
+		case let .timed(_, .fixed(amount), _): return amount
+		case _: return nil
 		}
 	}
 }

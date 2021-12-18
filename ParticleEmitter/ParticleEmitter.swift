@@ -12,8 +12,8 @@ struct ParticleEmitter<Particles: View>: View {
 	let state: InternalState
 	let particles: () -> Particles
 	
-	init(runMode: RunMode, emissionSource: EmissionSource = .canvas, @ViewBuilder particles: @escaping () -> Particles) {
-		self.state = InternalState(runMode: runMode, emissionSource: emissionSource)
+	init(runMode: RunMode, emissionRules: EmissionRules = .init(lifetime: 0.5), @ViewBuilder particles: @escaping () -> Particles) {
+		self.state = InternalState(runMode: runMode, emissionRules: emissionRules)
 		self.particles = particles
 	}
 	
@@ -28,7 +28,7 @@ struct ParticleEmitter<Particles: View>: View {
 
 struct ParticleEmitter_Previews: PreviewProvider {
 	static var previews: some View {
-		ParticleEmitter(runMode: .infinite(starting: 10, rate: 10)) {
+		ParticleEmitter(runMode: .infinite(.fixed(10))) {
 			Circle()
 				.frame(width: 10, height: 10, alignment: .bottom)
 				.tag(0)
