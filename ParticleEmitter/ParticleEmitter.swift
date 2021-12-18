@@ -7,21 +7,39 @@
 
 import SwiftUI
 
-struct ParticleEmitter<Particles: View>: View {
+struct ParticleEmitter<Particle: View>: View {
+	
+	let particleId = 0
 	
 	let state: InternalState
-	let particles: () -> Particles
+	let particle: Particle
 	
-	init(runMode: RunMode, emissionRules: EmissionRules = .init(lifetime: 0.5), @ViewBuilder particles: @escaping () -> Particles) {
+	init(runMode: RunMode, emissionRules: EmissionRules = .init(), particle: () -> Particle) {
 		self.state = InternalState(runMode: runMode, emissionRules: emissionRules)
-		self.particles = particles
+		self.particle = particle()
 	}
 	
 	var body: some View {
 		TimelineView(.animation) { timeline in
-			Canvas(opaque: false, rendersAsynchronously: true, renderer: { context, size in
+			Canvas(opaque: false, rendersAsynchronously: true) { context, size in
 				state.tick(date: timeline.date, canvasSize: size)
-			}, symbols: particles)
+				guard let symbol = context.resolveSymbol(id: particleId) else {
+					return assertionFailure("Missing symbol")
+				}
+				for particle in state.particles {
+					print(particle.rotation.degrees)
+					let position = CGPoint(x: particle.position.x * size.width,
+																 y: particle.position.y * size.height)
+					context.translateBy(x: position.x, y: position.y)
+					context.rotate(by: particle.rotation)
+					context.scaleBy(x: particle.scale, y: particle.scale)
+					context.translateBy(x: -position.x, y: -position.y)
+					context.draw(symbol, at: position)
+				}
+			} symbols: {
+				particle
+					.tag(particleId)
+			}
 		}
 	}
 }

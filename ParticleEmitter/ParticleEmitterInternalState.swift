@@ -48,7 +48,7 @@ extension ParticleEmitter {
 		}
 		
 		private func update(date: Date, delta: TimeInterval, canvasSize: CGSize) {
-			deleteParticles(on: date)
+			removeParticles(on: date)
 			emitParticles(delta, canvasSize: canvasSize)
 			for particle in particles {
 				updateParticle(particle, delta: delta, canvasSize: canvasSize)
@@ -61,8 +61,13 @@ extension ParticleEmitter {
 			}
 		}
 		
-		private func deleteParticles(on date: Date) {
-			particles = particles.filter { $0.expiration < date }
+		private func removeParticles(on date: Date) {
+			let previousCount = particles.count
+			particles = particles.filter { $0.expiration > date }
+			let difference = previousCount - particles.count
+			if difference > 0 {
+				print("Removed \(difference) particles")
+			}
 		}
 		
 		private var aggregationTimer: TimeInterval = 0
@@ -83,15 +88,15 @@ extension ParticleEmitter {
 		}
 		
 		private func emitParticle() {
-			let lifetime = emissionRules.lifetime + .random(in: -emissionRules.lifetimeVariation...emissionRules.lifetimeVariation)
-//			let particle = EmittedParticle(emittedAt: lastUpdate,
-//																		 expiration: <#T##Date#>,
-//																		 position: <#T##CGPoint#>,
-//																		 velocity: <#T##CGVector#>,
-//																		 rotation: <#T##Angle#>,
-//																		 rotationSpeed: <#T##Angle#>,
-//																		 scale: <#T##CGFloat#>,
-//																		 scaleSpeed: <#T##CGFloat#>)
+			let particle = EmittedParticle(emittedAt: lastUpdate,
+																		 expiration: lastUpdate.addingTimeInterval(emissionRules.newLifetime),
+																		 position: emissionRules.newPosition,
+																		 velocity: emissionRules.newVelocity,
+																		 rotation: emissionRules.newRotation,
+																		 rotationSpeed: emissionRules.newRotationSpeed,
+																		 scale: emissionRules.newScale,
+																		 scaleSpeed: emissionRules.newScaleSpeed)
+			particles.append(particle)
 		}
 		
 		private func updateParticle(_ particle: EmittedParticle, delta: TimeInterval, canvasSize: CGSize) {

@@ -17,6 +17,7 @@
 		C8BD1652276DD0850006EE07 /* ParticleEmitterEmittedParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8BD1651276DD0850006EE07 /* ParticleEmitterEmittedParticle.swift */; };
 		C8BD1654276DD6C50006EE07 /* ParticleEmitterEmissionSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8BD1653276DD6C50006EE07 /* ParticleEmitterEmissionSource.swift */; };
 		C8BD1656276E50340006EE07 /* ParticleEmitterEmissionRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8BD1655276E50340006EE07 /* ParticleEmitterEmissionRules.swift */; };
+		C8BD1659276E537B0006EE07 /* CGMath in Frameworks */ = {isa = PBXBuildFile; productRef = C8BD1658276E537B0006EE07 /* CGMath */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C8BD1659276E537B0006EE07 /* CGMath in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,6 +103,9 @@
 			dependencies = (
 			);
 			name = ParticleEmitter;
+			packageProductDependencies = (
+				C8BD1658276E537B0006EE07 /* CGMath */,
+			);
 			productName = ParticleEmitter;
 			productReference = C8BD163A276D53E20006EE07 /* ParticleEmitter.app */;
 			productType = "com.apple.product-type.application";
@@ -129,6 +134,9 @@
 				Base,
 			);
 			mainGroup = C8BD1631276D53E20006EE07;
+			packageReferences = (
+				C8BD1657276E537B0006EE07 /* XCRemoteSwiftPackageReference "CGMath" */,
+			);
 			productRefGroup = C8BD163B276D53E20006EE07 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -365,6 +373,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C8BD1657276E537B0006EE07 /* XCRemoteSwiftPackageReference "CGMath" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/EmilioPelaez/CGMath";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C8BD1658276E537B0006EE07 /* CGMath */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C8BD1657276E537B0006EE07 /* XCRemoteSwiftPackageReference "CGMath" */;
+			productName = CGMath;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C8BD1632276D53E20006EE07 /* Project object */;
 }

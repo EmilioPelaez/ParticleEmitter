@@ -12,22 +12,17 @@ struct ContentView: View {
 	let amount: Int = 10_000
 	
 	var body: some View {
-		TimelineView(.animation) { timeline in
-			Canvas(opaque: false, rendersAsynchronously: false) { context, size in
-				guard let symbol = context.resolveSymbol(id: symbolId) else { return }
-				(0..<amount).forEach { _ in
-					let point = CGPoint(x: .random(in: 0..<size.width),
-															y: .random(in: 0..<size.height))
-					context.draw(symbol, at: point)
-				}
-				_ = timeline.date
-			} symbols: {
-				Circle()
-					.stroke(.yellow)
-					.frame(width: 10, height: 10)
-					.tag(symbolId)
-			}
+		ParticleEmitter(runMode: .infinite(.fixed(1)), emissionRules: rules) {
+			Rectangle()
+				.foregroundColor(.yellow)
+				.frame(width: 10, height: 10)
 		}
+	}
+	
+	var rules: EmissionRules {
+		.init(emissionSource: .point(.init(x: 0.5, y: 0.5)),
+					rotation: Angle(degrees: 45),
+					scale: 2)
 	}
 }
 
