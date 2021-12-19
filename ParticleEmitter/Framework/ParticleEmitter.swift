@@ -9,9 +9,11 @@ import SwiftUI
 
 struct ParticleEmitter: View {
 	let state: InternalState
+	let debug: Bool
 	
-	init(runMode: RunMode, emissionRules: Rules = .init()) {
+	init(runMode: RunMode, emissionRules: Rules = .init(), debug: Bool = false) {
 		self.state = InternalState(runMode: runMode, emissionRules: emissionRules)
+		self.debug = debug
 	}
 	
 	var body: some View {
@@ -40,6 +42,7 @@ struct ParticleEmitter: View {
 						context.fill(path, with: .color(color))
 					}
 				}
+				guard debug else { return }
 				context.draw(Text("Particles: \(state.particles.count)\nFPS: \(state.fps)"), at: CGPoint(x: 10, y: size.height - 10), anchor: .bottomLeading)
 			} symbols: {
 				ForEach(Array(state.emissionRules.images.enumerated()), id: \.offset) { index, image in

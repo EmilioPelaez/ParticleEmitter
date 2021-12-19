@@ -45,7 +45,7 @@ extension ParticleEmitter {
 			}
 		}
 		
-		let opacity: ParticleOpacity
+		let opacity: OpacityRule
 		
 		let velocity: CGVector
 		let velocityVariation: CGVector
@@ -90,7 +90,7 @@ extension ParticleEmitter {
 		     lifetime: TimeInterval = 1,
 		     lifetimeVariation: TimeInterval = 0,
 		     emissionSource: Source = .canvas,
-		     opacity: ParticleOpacity = .fadeInOut(duration: 0.15),
+		     opacity: OpacityRule = .fadeInOut(duration: 0.15),
 		     speed: CGVector = .zero,
 		     speedVariation: CGVector = .zero,
 		     rotation: Angle = .zero,
