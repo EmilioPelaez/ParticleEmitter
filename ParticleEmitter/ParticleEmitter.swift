@@ -22,6 +22,7 @@ struct ParticleEmitter<Particle: View>: View {
 	var body: some View {
 		TimelineView(.animation) { timeline in
 			Canvas(opaque: false, rendersAsynchronously: true) { context, size in
+				guard !state.isFinished else { return }
 				state.tick(date: timeline.date, canvasSize: size)
 				guard let symbol = context.resolveSymbol(id: particleId) else {
 					return assertionFailure("Missing symbol")
@@ -36,7 +37,7 @@ struct ParticleEmitter<Particle: View>: View {
 					context.draw(symbol, at: position)
 					context.transform = .identity
 				}
-				context.draw(Text("FPS: \(state.fps)"), at: CGPoint(x: 10, y: size.height - 10), anchor: .bottomLeading)
+				context.draw(Text("Particles: \(state.particles.count)\nFPS: \(state.fps)"), at: CGPoint(x: 10, y: size.height - 10), anchor: .bottomLeading)
 			} symbols: {
 				particle
 					.tag(particleId)

@@ -12,7 +12,7 @@ struct ContentView: View {
 	let amount: Int = 10_000
 	
 	var body: some View {
-		ParticleEmitter(runMode: .infinite(.variable(starting: 100, rate: 10, maximum: 1000)), emissionRules: rules) {
+		ParticleEmitter(runMode: .once(particles: 1000, completion: completed), emissionRules: rules) {
 			Image(systemName: "snowflake")
 				.font(.caption2)
 				.foregroundColor(.cyan)
@@ -20,9 +20,13 @@ struct ContentView: View {
 		.ignoresSafeArea()
 	}
 	
+	func completed() {
+		print("Done!")
+	}
+	
 	var rules: EmissionRules {
-		.init(lifetime: 1000,
-					lifetimeVariation: 0,
+		.init(lifetime: 1,
+					lifetimeVariation: 0.95,
 					emissionSource: .horizontalLine(offset: 0),
 					speed: CGVector(dx: 0, dy: 100),
 					speedVariation: CGVector(dx: 0, dy: 25),

@@ -12,31 +12,49 @@ import SwiftUI
 
 extension ParticleEmitter {
 	class InternalState {
-		enum EmitterMode {
+		enum EmitterMode: Equatable {
 			case disabled
-			case threshold(TimeInterval)
+			case threshold(TimeInterval, maximum: Int)
 			case targetAmount(Int)
 		}
 		
 		let runMode: RunMode
-		
 		let emissionRules: EmissionRules
 		let emitterMode: EmitterMode
+		
+		let deadline: Date
+		let completion: (() -> Void)
 		
 		var lastUpdate: Date
 		var fps: Int = 0
 		var particles: [EmittedParticle] = []
+		var isFinished = false
 		
 		init(runMode: RunMode, emissionRules: EmissionRules) {
 			self.runMode = runMode
-			
 			self.emissionRules = emissionRules
-			if let rate = runMode.rate, rate > 0 {
-				emitterMode = .threshold(1 / TimeInterval(rate))
-			} else if let targetAmount = runMode.targetAmount {
-				emitterMode = .targetAmount(targetAmount)
-			} else {
-				emitterMode = .disabled
+			
+			switch runMode {
+			case let .infinite(.fixed(targetAmount)):
+				self.emitterMode = .targetAmount(targetAmount)
+				self.deadline = .distantFuture
+				self.completion = {}
+			case let .infinite(.variable(_, rate, maximum)):
+				self.emitterMode = .threshold(1 / TimeInterval(rate), maximum: maximum)
+				self.deadline = .distantFuture
+				self.completion = {}
+			case let .once(_, completion):
+				self.emitterMode = .disabled
+				self.deadline = .distantFuture
+				self.completion = completion
+			case let .timed(timeInterval, .fixed(targetAmount), completion):
+				self.emitterMode = .targetAmount(targetAmount)
+				self.deadline = Date().addingTimeInterval(timeInterval)
+				self.completion = completion
+			case let .timed(timeInterval, .variable(_, rate, maximum), completion):
+				self.emitterMode = .threshold(1 / TimeInterval(rate), maximum: maximum)
+				self.deadline = Date().addingTimeInterval(timeInterval)
+				self.completion = completion
 			}
 			
 			self.lastUpdate = Date()
@@ -45,11 +63,16 @@ extension ParticleEmitter {
 		}
 		
 		func tick(date: Date, canvasSize: CGSize) {
+			guard !isFinished else { return }
 			let delta = date.timeIntervalSince(lastUpdate)
 			guard delta > 0 else { return }
 			fps = Int(1 / delta)
 			update(date: date, delta: delta, canvasSize: canvasSize)
 			lastUpdate = date
+			
+			if isFinished {
+				DispatchQueue.main.async(execute: completion)
+			}
 		}
 		
 		private func update(date: Date, delta: TimeInterval, canvasSize: CGSize) {
@@ -70,14 +93,19 @@ extension ParticleEmitter {
 			particles = particles.filter {
 				$0.expiration > date && $0.scale > 0
 			}
+			guard particles.isEmpty else { return }
+			if deadline < Date() || emitterMode == .disabled {
+				isFinished = true
+			}
 		}
 		
 		private var aggregationTimer: TimeInterval = 0
 		private func emitParticles(_ delta: TimeInterval, canvasSize: CGSize) {
+			guard deadline > Date() else { return }
 			switch emitterMode {
-			case let .threshold(threshold):
+			case let .threshold(threshold, maximum):
 				aggregationTimer += delta
-				while aggregationTimer > threshold {
+				while particles.count < maximum && aggregationTimer > threshold {
 					emitParticle()
 					aggregationTimer -= threshold
 				}
