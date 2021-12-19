@@ -17,16 +17,7 @@ enum EmissionSource {
 	///	offset determines the X position
 	case verticalLine(offset: CGFloat)
 	case area(CGRect)
-}
-
-extension EmissionSource {
-	var emissionArea: CGRect {
-		switch self {
-		case .canvas: return CGRect(x: 0, y: 0, width: 1, height: 1)
-		case let .point(origin): return CGRect(origin: origin, size: .zero)
-		case let .horizontalLine(offset): return CGRect(x: 0, y: offset, width: 1, height: 0)
-		case let .verticalLine(offset): return CGRect(x: offset, y: 0, width: 0, height: 1)
-		case let .area(rect): return rect
-		}
-	}
+	///	A closure receiving the current size of the canvas,
+	///	which returns a normalized position
+	case custom((CGSize) -> CGPoint)
 }

@@ -25,6 +25,7 @@ extension ParticleEmitter {
 		let deadline: Date
 		let completion: (() -> Void)
 		
+		var initialEmissionDone = false
 		var lastUpdate: Date
 		var fps: Int = 0
 		var particles: [EmittedParticle] = []
@@ -58,8 +59,6 @@ extension ParticleEmitter {
 			}
 			
 			self.lastUpdate = Date()
-			
-			emitStartingParticles()
 		}
 		
 		func tick(date: Date, canvasSize: CGSize) {
@@ -76,6 +75,10 @@ extension ParticleEmitter {
 		}
 		
 		private func update(date: Date, delta: TimeInterval, canvasSize: CGSize) {
+			if !initialEmissionDone {
+				emitStartingParticles(canvasSize: canvasSize)
+				initialEmissionDone = true
+			}
 			emitParticles(delta, canvasSize: canvasSize)
 			for particle in particles {
 				updateParticle(particle, delta: delta, canvasSize: canvasSize)
@@ -83,9 +86,9 @@ extension ParticleEmitter {
 			removeParticles(on: date)
 		}
 		
-		private func emitStartingParticles() {
+		private func emitStartingParticles(canvasSize: CGSize) {
 			(0..<runMode.initialParticleAmount).forEach { _ in
-				emitParticle()
+				emitParticle(canvasSize: canvasSize)
 			}
 		}
 		
@@ -106,21 +109,21 @@ extension ParticleEmitter {
 			case let .threshold(threshold, maximum):
 				aggregationTimer += delta
 				while particles.count < maximum && aggregationTimer > threshold {
-					emitParticle()
+					emitParticle(canvasSize: canvasSize)
 					aggregationTimer -= threshold
 				}
 			case let .targetAmount(amount):
 				while particles.count < amount {
-					emitParticle()
+					emitParticle(canvasSize: canvasSize)
 				}
 			case .disabled: break
 			}
 		}
 		
-		private func emitParticle() {
+		private func emitParticle(canvasSize: CGSize) {
 			let particle = EmittedParticle(emittedAt: lastUpdate,
 																		 expiration: lastUpdate.addingTimeInterval(emissionRules.newLifetime),
-																		 position: emissionRules.newPosition,
+																		 position: emissionRules.newPosition(with: canvasSize),
 																		 velocity: emissionRules.newVelocity,
 																		 rotation: emissionRules.newRotation,
 																		 rotationSpeed: emissionRules.newRotationSpeed,

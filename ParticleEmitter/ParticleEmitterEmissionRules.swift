@@ -16,7 +16,7 @@ struct EmissionRules {
 	var newLifetime: TimeInterval { randomScalar(base: lifetime, variation: lifetimeVariation) }
 	
 	let emissionSource: EmissionSource
-	var newPosition: CGPoint {
+	func newPosition(with size: CGSize) -> CGPoint {
 		switch emissionSource {
 		case .canvas:
 			return CGPoint(x: CGFloat.random(in: 0...1), y: CGFloat.random(in: 0...1))
@@ -27,6 +27,8 @@ struct EmissionRules {
 			return CGPoint(x: offset, y: .random(in: 0...1))
 		case let .area(rect):
 			return rect.origin + CGPoint(x: .random(in: 0...rect.width), y: .random(in: 0...rect.height))
+		case let .custom(generator):
+			return generator(size)
 		}
 	}
 	
