@@ -19,19 +19,19 @@ extension ParticleEmitter {
 		}
 		
 		let runMode: RunMode
-		let emissionRules: EmissionRules
+		let emissionRules: Rules
 		let emitterMode: EmitterMode
 		
 		let deadline: Date
-		let completion: (() -> Void)
+		let completion: () -> Void
 		
 		var initialEmissionDone = false
 		var lastUpdate: Date
 		var fps: Int = 0
-		var particles: [EmittedParticle] = []
+		var particles: [Particle] = []
 		var isFinished = false
 		
-		init(runMode: RunMode, emissionRules: EmissionRules) {
+		init(runMode: RunMode, emissionRules: Rules) {
 			self.runMode = runMode
 			self.emissionRules = emissionRules
 			
@@ -87,7 +87,7 @@ extension ParticleEmitter {
 		}
 		
 		private func emitStartingParticles(canvasSize: CGSize) {
-			(0..<runMode.initialParticleAmount).forEach { _ in
+			(0 ..< runMode.initialParticleAmount).forEach { _ in
 				emitParticle(canvasSize: canvasSize)
 			}
 		}
@@ -108,7 +108,7 @@ extension ParticleEmitter {
 			switch emitterMode {
 			case let .threshold(threshold, maximum):
 				aggregationTimer += delta
-				while particles.count < maximum && aggregationTimer > threshold {
+				while particles.count < maximum, aggregationTimer > threshold {
 					emitParticle(canvasSize: canvasSize)
 					aggregationTimer -= threshold
 				}
@@ -123,29 +123,30 @@ extension ParticleEmitter {
 		private func emitParticle(canvasSize: CGSize) {
 			let imageIndex = emissionRules.newImageIndex
 			let colorIndex = emissionRules.matchImagesAndColors ? imageIndex : emissionRules.newColorIndex
-			let particle = EmittedParticle(imageIndex: imageIndex,
-																		 colorIndex: colorIndex,
-																		 emittedAt: lastUpdate,
-																		 expiration: lastUpdate.addingTimeInterval(emissionRules.newLifetime),
-																		 opacity: emissionRules.opacity.opacity(at: 0),
-																		 position: emissionRules.newPosition(with: canvasSize),
-																		 velocity: emissionRules.newVelocity,
-																		 rotation: emissionRules.newRotation,
-																		 rotationSpeed: emissionRules.newRotationSpeed,
-																		 scale: emissionRules.newScale,
-																		 scaleSpeed: emissionRules.newScaleSpeed)
+			let particle = Particle(imageIndex: imageIndex,
+			                        colorIndex: colorIndex,
+			                        emittedAt: lastUpdate,
+			                        expiration: lastUpdate.addingTimeInterval(emissionRules.newLifetime),
+			                        opacity: emissionRules.opacity.opacity(at: 0),
+			                        position: emissionRules.newPosition(with: canvasSize),
+			                        velocity: emissionRules.newVelocity,
+			                        rotation: emissionRules.newRotation,
+			                        rotationSpeed: emissionRules.newRotationSpeed,
+			                        scale: emissionRules.newScale,
+			                        scaleSpeed: emissionRules.newScaleSpeed)
 			particles.append(particle)
 		}
 		
-		private func updateParticle(_ particle: EmittedParticle, date: Date, delta: TimeInterval, canvasSize: CGSize) {
+		private func updateParticle(_ particle: Particle, date: Date, delta: TimeInterval, canvasSize: CGSize) {
 			let movement = CGPoint(x: particle.velocity.dx / canvasSize.width,
-														 y: particle.velocity.dy / canvasSize.height)
+			                       y: particle.velocity.dy / canvasSize.height)
+			//	swiftlint:disable:next shorthand_operator
 			particle.position = particle.position + movement * delta
 			particle.rotation += particle.rotationSpeed * delta
 			particle.scale += particle.scaleSpeed * delta
 			let lifetimeProgress = inverseLerp(start: particle.emittedAt.timeIntervalSinceReferenceDate,
-																				 end: particle.expiration.timeIntervalSinceReferenceDate,
-																				 value: date.timeIntervalSinceReferenceDate).clamped()
+			                                   end: particle.expiration.timeIntervalSinceReferenceDate,
+			                                   value: date.timeIntervalSinceReferenceDate).clamped()
 			particle.opacity = emissionRules.opacity.opacity(at: lifetimeProgress)
 		}
 		

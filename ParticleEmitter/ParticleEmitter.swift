@@ -8,12 +8,9 @@
 import SwiftUI
 
 struct ParticleEmitter: View {
-	
-	let particleId = 0
-	
 	let state: InternalState
 	
-	init(runMode: RunMode, emissionRules: EmissionRules = .init()) {
+	init(runMode: RunMode, emissionRules: Rules = .init()) {
 		self.state = InternalState(runMode: runMode, emissionRules: emissionRules)
 	}
 	
@@ -25,7 +22,7 @@ struct ParticleEmitter: View {
 				for particle in state.particles {
 					context.drawLayer { context in
 						let position = CGPoint(x: particle.position.x * size.width,
-																	 y: particle.position.y * size.height)
+						                       y: particle.position.y * size.height)
 						context.translateBy(x: position.x, y: position.y)
 						context.rotate(by: particle.rotation)
 						context.scaleBy(x: particle.scale, y: particle.scale)

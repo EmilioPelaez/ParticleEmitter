@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 extension ParticleEmitter {
-	class EmittedParticle {
+	class Particle {
 		let imageIndex: Int
 		let colorIndex: Int
 		
@@ -29,16 +29,16 @@ extension ParticleEmitter {
 		var scaleSpeed: CGFloat
 		
 		init(imageIndex: Int,
-				 colorIndex: Int,
-				 emittedAt: Date,
-				 expiration: Date,
-				 opacity: CGFloat,
-				 position: CGPoint,
-				 velocity: CGVector,
-				 rotation: Angle,
-				 rotationSpeed: Angle,
-				 scale: CGFloat,
-				 scaleSpeed: CGFloat) {
+		     colorIndex: Int,
+		     emittedAt: Date,
+		     expiration: Date,
+		     opacity: CGFloat,
+		     position: CGPoint,
+		     velocity: CGVector,
+		     rotation: Angle,
+		     rotationSpeed: Angle,
+		     scale: CGFloat,
+		     scaleSpeed: CGFloat) {
 			self.imageIndex = imageIndex
 			self.colorIndex = colorIndex
 			self.emittedAt = emittedAt
