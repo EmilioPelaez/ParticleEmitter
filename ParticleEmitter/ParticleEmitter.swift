@@ -7,16 +7,14 @@
 
 import SwiftUI
 
-struct ParticleEmitter<Particle: View>: View {
+struct ParticleEmitter: View {
 	
 	let particleId = 0
 	
 	let state: InternalState
-	let particle: Particle
 	
-	init(runMode: RunMode, emissionRules: EmissionRules = .init(), particle: () -> Particle) {
+	init(runMode: RunMode, emissionRules: EmissionRules = .init()) {
 		self.state = InternalState(runMode: runMode, emissionRules: emissionRules)
-		self.particle = particle()
 	}
 	
 	var body: some View {
@@ -24,23 +22,34 @@ struct ParticleEmitter<Particle: View>: View {
 			Canvas(opaque: false, rendersAsynchronously: true) { context, size in
 				guard !state.isFinished else { return }
 				state.tick(date: timeline.date, canvasSize: size)
-				guard let symbol = context.resolveSymbol(id: particleId) else {
-					return assertionFailure("Missing symbol")
-				}
 				for particle in state.particles {
-					let position = CGPoint(x: particle.position.x * size.width,
-																 y: particle.position.y * size.height)
-					context.translateBy(x: position.x, y: position.y)
-					context.rotate(by: particle.rotation)
-					context.scaleBy(x: particle.scale, y: particle.scale)
-					context.translateBy(x: -position.x, y: -position.y)
-					context.draw(symbol, at: position)
-					context.transform = .identity
+					context.drawLayer { context in
+						let position = CGPoint(x: particle.position.x * size.width,
+																	 y: particle.position.y * size.height)
+						context.translateBy(x: position.x, y: position.y)
+						context.rotate(by: particle.rotation)
+						context.scaleBy(x: particle.scale, y: particle.scale)
+						context.translateBy(x: -position.x, y: -position.y)
+						context.opacity = particle.opacity
+						
+						guard let resolved = context.resolveSymbol(id: particle.imageIndex) else {
+							return
+						}
+						context.draw(resolved, at: position)
+						context.blendMode = .sourceIn
+						let rect = CGRect(center: position, size: resolved.size)
+						let path = Path(rect)
+						let color = state.emissionRules.colors[particle.colorIndex]
+						context.fill(path, with: .color(color))
+					}
 				}
 				context.draw(Text("Particles: \(state.particles.count)\nFPS: \(state.fps)"), at: CGPoint(x: 10, y: size.height - 10), anchor: .bottomLeading)
 			} symbols: {
-				particle
-					.tag(particleId)
+				ForEach(Array(state.emissionRules.images.enumerated()), id: \.offset) { index, image in
+					image
+						.tag(index)
+				}
+				
 			}
 		}
 	}
@@ -48,10 +57,6 @@ struct ParticleEmitter<Particle: View>: View {
 
 struct ParticleEmitter_Previews: PreviewProvider {
 	static var previews: some View {
-		ParticleEmitter(runMode: .infinite(.fixed(10))) {
-			Circle()
-				.frame(width: 10, height: 10, alignment: .bottom)
-				.tag(0)
-		}
+		ParticleEmitter(runMode: .infinite(.fixed(10)))
 	}
 }

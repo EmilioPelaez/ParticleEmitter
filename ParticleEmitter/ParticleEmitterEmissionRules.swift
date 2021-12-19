@@ -11,6 +11,17 @@ import SwiftUI
 import CGMath
 
 struct EmissionRules {
+	let images: [Image]
+	var newImageIndex: Int {
+		.random(in: 0..<images.count)
+	}
+	
+	let colors: [Color]
+	var newColorIndex: Int {
+		.random(in: 0..<colors.count)
+	}
+	let matchImagesAndColors: Bool
+	
 	let lifetime: TimeInterval
 	let lifetimeVariation: TimeInterval
 	var newLifetime: TimeInterval { randomScalar(base: lifetime, variation: lifetimeVariation) }
@@ -31,6 +42,8 @@ struct EmissionRules {
 			return generator(size)
 		}
 	}
+	
+	let opacity: ParticleOpacity
 	
 	let velocity: CGVector
 	let velocityVariation: CGVector
@@ -69,38 +82,48 @@ struct EmissionRules {
 		Bool.random() ? 1 : -1
 	}
 	
-	init(
-		lifetime: TimeInterval = 1,
-		lifetimeVariation: TimeInterval = 0,
-		emissionSource: EmissionSource = .canvas,
-		speed: CGVector = .zero,
-		speedVariation: CGVector = .zero,
-		rotation: Angle = .zero,
-		rotationVariation: Angle = .zero,
-		rotationSpeed: Angle = .zero,
-		rotationSpeedVariation: Angle = .zero,
-		scale: CGFloat = 1,
-		scaleVariation: CGFloat = 0,
-		scaleSpeed: CGFloat = 0,
-		scaleSpeedVariation: CGFloat = 0) {
-			self.emissionSource = emissionSource
-			
-			self.lifetime = lifetime
-			self.lifetimeVariation = lifetimeVariation
-			
-			self.velocity = speed
-			self.velocityVariation = speedVariation
-			
-			self.rotation = rotation
-			self.rotationVariation = rotationVariation
-			
-			self.rotationSpeed = rotationSpeed
-			self.rotationSpeedVariation = rotationSpeedVariation
-			
-			self.scale = scale
-			self.scaleVariation = scaleVariation
-			
-			self.scaleSpeed = scaleSpeed
-			self.scaleSpeedVariation = scaleSpeedVariation
-		}
+	init(images: [Image] = [Image(systemName: "star.fill")],
+			 colors: [Color] = [.primary],
+			 matchImagesAndColors: Bool = false,
+			 lifetime: TimeInterval = 1,
+			 lifetimeVariation: TimeInterval = 0,
+			 emissionSource: EmissionSource = .canvas,
+			 opacity: ParticleOpacity = .fadeInOut(duration: 0.15),
+			 speed: CGVector = .zero,
+			 speedVariation: CGVector = .zero,
+			 rotation: Angle = .zero,
+			 rotationVariation: Angle = .zero,
+			 rotationSpeed: Angle = .zero,
+			 rotationSpeedVariation: Angle = .zero,
+			 scale: CGFloat = 1,
+			 scaleVariation: CGFloat = 0,
+			 scaleSpeed: CGFloat = 0,
+			 scaleSpeedVariation: CGFloat = 0) {
+		self.images = images
+		self.colors = colors
+		
+		self.matchImagesAndColors = matchImagesAndColors
+		
+		self.emissionSource = emissionSource
+		
+		self.lifetime = lifetime
+		self.lifetimeVariation = lifetimeVariation
+		
+		self.opacity = opacity
+		
+		self.velocity = speed
+		self.velocityVariation = speedVariation
+		
+		self.rotation = rotation
+		self.rotationVariation = rotationVariation
+		
+		self.rotationSpeed = rotationSpeed
+		self.rotationSpeedVariation = rotationSpeedVariation
+		
+		self.scale = scale
+		self.scaleVariation = scaleVariation
+		
+		self.scaleSpeed = scaleSpeed
+		self.scaleSpeedVariation = scaleSpeedVariation
+	}
 }

@@ -18,6 +18,7 @@
 		C8BD1654276DD6C50006EE07 /* ParticleEmitterEmissionSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8BD1653276DD6C50006EE07 /* ParticleEmitterEmissionSource.swift */; };
 		C8BD1656276E50340006EE07 /* ParticleEmitterEmissionRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8BD1655276E50340006EE07 /* ParticleEmitterEmissionRules.swift */; };
 		C8BD1659276E537B0006EE07 /* CGMath in Frameworks */ = {isa = PBXBuildFile; productRef = C8BD1658276E537B0006EE07 /* CGMath */; };
+		C8BD165B276F4DA10006EE07 /* ParticleOpacity.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8BD165A276F4DA10006EE07 /* ParticleOpacity.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		C8BD1651276DD0850006EE07 /* ParticleEmitterEmittedParticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleEmitterEmittedParticle.swift; sourceTree = "<group>"; };
 		C8BD1653276DD6C50006EE07 /* ParticleEmitterEmissionSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleEmitterEmissionSource.swift; sourceTree = "<group>"; };
 		C8BD1655276E50340006EE07 /* ParticleEmitterEmissionRules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleEmitterEmissionRules.swift; sourceTree = "<group>"; };
+		C8BD165A276F4DA10006EE07 /* ParticleOpacity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleOpacity.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +77,7 @@
 				C8BD1651276DD0850006EE07 /* ParticleEmitterEmittedParticle.swift */,
 				C8BD1641276D53E30006EE07 /* Assets.xcassets */,
 				C8BD1643276D53E30006EE07 /* Preview Content */,
+				C8BD165A276F4DA10006EE07 /* ParticleOpacity.swift */,
 			);
 			path = ParticleEmitter;
 			sourceTree = "<group>";
@@ -169,6 +172,7 @@
 				C8BD163E276D53E20006EE07 /* ParticleEmitterApp.swift in Sources */,
 				C8BD1650276DCFB20006EE07 /* ParticleEmitterInternalState.swift in Sources */,
 				C8BD1652276DD0850006EE07 /* ParticleEmitterEmittedParticle.swift in Sources */,
+				C8BD165B276F4DA10006EE07 /* ParticleOpacity.swift in Sources */,
 				C8BD164C276D57CE0006EE07 /* ParticleEmitter.swift in Sources */,
 				C8BD164E276D57E50006EE07 /* ParticleEmitterRunMode.swift in Sources */,
 			);

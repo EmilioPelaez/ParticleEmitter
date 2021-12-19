@@ -81,7 +81,7 @@ extension ParticleEmitter {
 			}
 			emitParticles(delta, canvasSize: canvasSize)
 			for particle in particles {
-				updateParticle(particle, delta: delta, canvasSize: canvasSize)
+				updateParticle(particle, date: date, delta: delta, canvasSize: canvasSize)
 			}
 			removeParticles(on: date)
 		}
@@ -121,8 +121,13 @@ extension ParticleEmitter {
 		}
 		
 		private func emitParticle(canvasSize: CGSize) {
-			let particle = EmittedParticle(emittedAt: lastUpdate,
+			let imageIndex = emissionRules.newImageIndex
+			let colorIndex = emissionRules.matchImagesAndColors ? imageIndex : emissionRules.newColorIndex
+			let particle = EmittedParticle(imageIndex: imageIndex,
+																		 colorIndex: colorIndex,
+																		 emittedAt: lastUpdate,
 																		 expiration: lastUpdate.addingTimeInterval(emissionRules.newLifetime),
+																		 opacity: emissionRules.opacity.opacity(at: 0),
 																		 position: emissionRules.newPosition(with: canvasSize),
 																		 velocity: emissionRules.newVelocity,
 																		 rotation: emissionRules.newRotation,
@@ -132,12 +137,16 @@ extension ParticleEmitter {
 			particles.append(particle)
 		}
 		
-		private func updateParticle(_ particle: EmittedParticle, delta: TimeInterval, canvasSize: CGSize) {
+		private func updateParticle(_ particle: EmittedParticle, date: Date, delta: TimeInterval, canvasSize: CGSize) {
 			let movement = CGPoint(x: particle.velocity.dx / canvasSize.width,
 														 y: particle.velocity.dy / canvasSize.height)
 			particle.position = particle.position + movement * delta
 			particle.rotation += particle.rotationSpeed * delta
 			particle.scale += particle.scaleSpeed * delta
+			let lifetimeProgress = inverseLerp(start: particle.emittedAt.timeIntervalSinceReferenceDate,
+																				 end: particle.expiration.timeIntervalSinceReferenceDate,
+																				 value: date.timeIntervalSinceReferenceDate).clamped()
+			particle.opacity = emissionRules.opacity.opacity(at: lifetimeProgress)
 		}
 		
 	}
