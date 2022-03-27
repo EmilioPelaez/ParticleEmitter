@@ -23,6 +23,10 @@ struct ContentView: View {
 					StarryNight()
 						.navigationTitle("Starry Night")
 				}
+				NavigationLink("Hearts") {
+					HeartsView()
+						.navigationTitle("Hearts")
+				}
 			}
 			.navigationTitle("Examples")
 		}

@@ -148,6 +148,8 @@ extension ParticleEmitter {
 			                                   end: particle.expiration.timeIntervalSinceReferenceDate,
 			                                   value: date.timeIntervalSinceReferenceDate).clamped()
 			particle.opacity = emissionRules.opacity.opacity(at: lifetimeProgress)
+			
+			particle.velocity += emissionRules.gravity * delta
 		}
 		
 	}

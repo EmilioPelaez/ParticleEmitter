@@ -22,6 +22,7 @@
 		C8C9AA5D276FC86000FB97CE /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C9AA5C276FC86000FB97CE /* ConfettiView.swift */; };
 		C8C9AA5F276FC8A300FB97CE /* SnowfallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C9AA5E276FC8A300FB97CE /* SnowfallView.swift */; };
 		C8C9AA61276FC9A100FB97CE /* StarryNightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C9AA60276FC9A100FB97CE /* StarryNightView.swift */; };
+		C8FBEC9427F0916E00DECDAA /* HeartsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8FBEC9327F0916E00DECDAA /* HeartsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		C8C9AA5C276FC86000FB97CE /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
 		C8C9AA5E276FC8A300FB97CE /* SnowfallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnowfallView.swift; sourceTree = "<group>"; };
 		C8C9AA60276FC9A100FB97CE /* StarryNightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarryNightView.swift; sourceTree = "<group>"; };
+		C8FBEC9327F0916E00DECDAA /* HeartsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +99,7 @@
 				C8C9AA5C276FC86000FB97CE /* ConfettiView.swift */,
 				C8C9AA5E276FC8A300FB97CE /* SnowfallView.swift */,
 				C8C9AA60276FC9A100FB97CE /* StarryNightView.swift */,
+				C8FBEC9327F0916E00DECDAA /* HeartsView.swift */,
 			);
 			path = Examples;
 			sourceTree = "<group>";
@@ -223,6 +226,7 @@
 				C8BD1652276DD0850006EE07 /* ParticleEmitterParticle.swift in Sources */,
 				C8BD165B276F4DA10006EE07 /* ParticleEmitterOpacityRule.swift in Sources */,
 				C8BD164C276D57CE0006EE07 /* ParticleEmitter.swift in Sources */,
+				C8FBEC9427F0916E00DECDAA /* HeartsView.swift in Sources */,
 				C8C9AA5D276FC86000FB97CE /* ConfettiView.swift in Sources */,
 				C8BD164E276D57E50006EE07 /* ParticleEmitterRunMode.swift in Sources */,
 			);
