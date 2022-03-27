@@ -25,7 +25,7 @@ struct HeartsView: View {
 			.overlay(alignment: .bottom) {
 				if particles {
 					ParticleEmitter(runMode: runMode, emissionRules: rules)
-						.frame(width: 50, height: 75, alignment: .bottom)
+						.frame(width: 60, height: 75, alignment: .bottom)
 				}
 			}
 		}
@@ -43,11 +43,13 @@ struct HeartsView: View {
 		      matchImagesAndColors: false,
 		      lifetime: 0.9,
 		      lifetimeVariation: 0.1,
-		      emissionSource: .area(CGRect(x: 0.25, y: 0.65, width: 0.5, height: 0.2)),
+		      emissionSource: .area(CGRect(x: 0.3, y: 0.65, width: 0.4, height: 0.2)),
 		      opacity: .fadeOut(duration: 0.15),
 		      gravity: .init(dx: 0, dy: -50),
-		      velocity: .init(dx: 0, dy: -10),
-		      velocityVariation: .init(dx: 0, dy: 5),
+		      speed: 10,
+		      speedVariation: 5,
+		      direction: .degrees(-90),
+		      directionVariation: .degrees(90),
 		      rotation: .zero,
 		      rotationVariation: .degrees(15),
 		      rotationSpeed: .zero,

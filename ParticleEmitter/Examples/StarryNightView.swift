@@ -26,8 +26,6 @@ struct StarryNight: View {
 		      lifetimeVariation: 4.5,
 		      emissionSource: .canvas,
 		      opacity: .fadeInOut(duration: 0.15),
-		      velocity: .zero,
-		      velocityVariation: .zero,
 		      rotation: .zero,
 		      rotationVariation: .degrees(360),
 		      rotationSpeed: .zero,

@@ -123,13 +123,17 @@ extension ParticleEmitter {
 		private func emitParticle(canvasSize: CGSize) {
 			let imageIndex = emissionRules.newImageIndex
 			let colorIndex = emissionRules.matchImagesAndColors ? imageIndex : emissionRules.newColorIndex
+			let speed = emissionRules.newSpeed
+			let direction = emissionRules.newDirection
+			let velocity = CGVector(dx: speed * cos(CGFloat(direction.radians)),
+			                        dy: speed * sin(CGFloat(direction.radians)))
 			let particle = Particle(imageIndex: imageIndex,
 			                        colorIndex: colorIndex,
 			                        emittedAt: lastUpdate,
 			                        expiration: lastUpdate.addingTimeInterval(emissionRules.newLifetime),
 			                        opacity: emissionRules.opacity.opacity(at: 0),
 			                        position: emissionRules.newPosition(with: canvasSize),
-			                        velocity: emissionRules.newVelocity,
+			                        velocity: velocity,
 			                        rotation: emissionRules.newRotation,
 			                        rotationSpeed: emissionRules.newRotationSpeed,
 			                        scale: emissionRules.newScale,

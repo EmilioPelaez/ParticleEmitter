@@ -49,12 +49,16 @@ extension ParticleEmitter {
 		
 		let gravity: CGVector
 		
-		let velocity: CGVector
-		let velocityVariation: CGVector
-		var newVelocity: CGVector {
-			let speedX = randomScalar(base: velocity.dx, variation: velocityVariation.dx)
-			let speedY = randomScalar(base: velocity.dy, variation: velocityVariation.dy)
-			return CGVector(dx: speedX, dy: speedY)
+		let speed: CGFloat
+		let speedVariation: CGFloat
+		var newSpeed: CGFloat {
+			randomScalar(base: speed, variation: speedVariation)
+		}
+
+		let direction: Angle
+		let directionVariation: Angle
+		var newDirection: Angle {
+			Angle(degrees: randomScalar(base: direction.degrees, variation: directionVariation.degrees))
 		}
 		
 		let rotation: Angle
@@ -94,8 +98,10 @@ extension ParticleEmitter {
 		     emissionSource: Source = .canvas,
 		     opacity: OpacityRule = .fadeInOut(duration: 0.15),
 		     gravity: CGVector = .zero,
-		     velocity: CGVector = .zero,
-		     velocityVariation: CGVector = .zero,
+		     speed: CGFloat = 0,
+		     speedVariation: CGFloat = 0,
+		     direction: Angle = .zero,
+		     directionVariation: Angle = .zero,
 		     rotation: Angle = .zero,
 		     rotationVariation: Angle = .zero,
 		     rotationSpeed: Angle = .zero,
@@ -118,8 +124,11 @@ extension ParticleEmitter {
 			
 			self.gravity = gravity
 			
-			self.velocity = velocity
-			self.velocityVariation = velocityVariation
+			self.speed = speed
+			self.speedVariation = speedVariation
+			
+			self.direction = direction
+			self.directionVariation = directionVariation
 			
 			self.rotation = rotation
 			self.rotationVariation = rotationVariation
